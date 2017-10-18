@@ -195,7 +195,7 @@
                         "description": "Specification version",
                         "required": true,
                         "type": "string",
-                        "default": "1.0",
+                        "default": "1.2",
                         "enum": [
                             "1.0",
                             "1.1",
