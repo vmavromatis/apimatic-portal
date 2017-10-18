@@ -33,7 +33,7 @@
     "schemes": [
         "https"
     ],
-    "host": "api.test.apitude.com",
+    "host": "api.test.hotelbeds.com",
     "paths": {
         "/{version}/status": {
             "get": {
