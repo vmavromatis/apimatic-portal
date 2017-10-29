@@ -1469,8 +1469,8 @@
         },
         "ApiPaymentData": {
             "type": "object",
-            "required": [
-                "contactData",
+              "required": [
+              "contactData",
                 "paymentCard"
             ],
             "properties": {
