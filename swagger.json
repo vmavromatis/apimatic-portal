@@ -1,2944 +1,2937 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "description": "BOOKINGAPI is designed to book hotels in real time as fast as in two steps. It covers the complete booking process; it allows generating lists of hotels, confirming bookings, getting lists of bookings, obtaining booking information, making cancellations and modify existing bookings.\n\r BOOKINGAPI works in combination with CONTENTAPI to obtain content information from the hotels, such as pictures, description, facilities, services, etc. Please refer to the ContentAPI documentation and IO/DOCS for related information.\n\r  BOOKINGAPI has been designed for a two steps confirmation, but due the the complexity of client and providers systems a third method has been designed.",
-        "version": "1.0",
-        "title": "APITUDE BOOKINGAPI",
-        "termsOfService": "https://developer.hotelbeds.com/getting_started",
-        "contact": {
-            "name": "APITUDE, Hotelbeds Group",
-            "url": "https://developer.hotelbeds.com",
-            "email": "apitude@hotelbeds.com"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        }
+  "swagger": "2.0",
+  "info": {
+    "description": "BOOKINGAPI is designed to book hotels in real time as fast as in two steps. It covers the complete booking process; it allows generating lists of hotels, confirming bookings, getting lists of bookings, obtaining booking information, making cancellations and modify existing bookings.\n\r BOOKINGAPI works in combination with CONTENTAPI to obtain content information from the hotels, such as pictures, description, facilities, services, etc. Please refer to the ContentAPI documentation and IO/DOCS for related information.\n\r  BOOKINGAPI has been designed for a two steps confirmation, but due the the complexity of client and providers systems a third method has been designed.",
+    "version": "1.0",
+    "title": "APITUDE BOOKINGAPI",
+    "termsOfService": "https://developer.hotelbeds.com/getting_started",
+    "contact": {
+      "name": "APITUDE, Hotelbeds Group",
+      "url": "https://developer.hotelbeds.com",
+      "email": "apitude@hotelbeds.com"
     },
-    "basePath": "/hotel-api",
-    "tags": [
-        {
-            "name": "status"
-        },
-        {
-            "name": "hotels"
-        },
-        {
-            "name": "checkrates"
-        },
-        {
-            "name": "bookings"
-        }
-    ],
-    "schemes": [
-        "https"
-    ],
-    "host": "api.test.hotelbeds.com",
-    "paths": {
-        "/{version}/status": {
-            "get": {
-                "tags": [
-                    "status"
-                ],
-                "summary": "Check API status",
-                "description": "Returns the status of the API",
-                "operationId": "status",
-                "produces": [
-                    "application/json",
-                    "application/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "version",
-                        "in": "path",
-                        "description": "Default version for this operation",
-                        "required": true,
-                        "type": "string",
-                        "default": "1.0",
-                        "enum": [
-                            "1.0",
-                            "1.1",
-                            "1.2"
-                        ]
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-						"schema": {
-                            "$ref": "#/definitions/statusRS"
-                         }
-                    },
-                    "500": {
-                        "description": "Unexpected error"
-                    }
-                }
-            }
-        },
-        "/{version}/hotels": {
-            "post": {
-                "tags": [
-                    "hotels"
-                ],
-                "summary": "Hotel availability",
-                "description": "This method is used to request room availability. Some filters and special features can be applied before sending an availability request. \n\nA flexible date search allows customers to retrieve available rates for a specified number of days prior to and post check-in.\n\nThe response generated is a list of hotels with the different room types, board types, and rates available for those hotels; but not only restricted to the dates selected.\n\nBookingAPI prices are final. Our rates include supplements and discounts and no additional price calculations are required.\n\nIt can also return cancellation fees in the availability response, providing amounts and dates at the first step of the booking.",
-                "operationId": "availability",
-                "consumes": [
-                    "application/json",
-                    "application/xml"
-                ],
-                "produces": [
-                    "application/json",
-                    "application/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "version",
-                        "in": "path",
-                        "description": "Default version for this operation",
-                        "required": true,
-                        "type": "string",
-                        "default": "1.0",
-                        "enum": [
-                            "1.0",
-                            "1.1",
-                            "1.2"
-                        ]
-                    },
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Request body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/availabilityRQ"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation
-",
-                        "schema": {
-                            "$ref": "#/definitions/availabilityRS"
-                        }
-                    }
-                }
-            }
-        },
-        "/{version}/checkrates": {
-            "post": {
-                "tags": [
-                    "checkrates"
-                ],
-                "summary": "Check Availability Rates",
-                "description": "The checkrates method can complement the booking process, as it returns additional information to the availability request. However, when the rateType value is \"RECHECK\", the checkrates method is mandatory.\n\nThe rateType value \"RECHECK\" is returned for rates that do not have real-time availability. This is, that come from accommodation partners that update their products in our system periodically, with varying frequency depending on the supplier itself, the destination, hotels, etc.\n\nThe checkrates method response contains the same information provided in the availability response, but returns information only for a specific hotel and rate. The purpose of this method is double check availability and prices for any particular hotel/rate.\n\nThe prices obtained via this method are always up-to-date; along with some other information: rate breakdown, rate comments and upselling options.",
-                "operationId": "checkRate",
-                "consumes": [
-                    "application/json",
-                    "application/xml"
-                ],
-                "produces": [
-                    "application/json",
-                    "application/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "version",
-                        "in": "path",
-                        "description": "Default version for this operation",
-                        "required": true,
-                        "type": "string",
-                        "default": "1.0",
-                        "enum": [
-                            "1.0",
-                            "1.1",
-                            "1.2"
-                        ]
-                    },
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Request body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/checkRateRQ"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation
-",
-                        "schema": {
-                            "$ref": "#/definitions/checkRateRS"
-                        }
-                    }
-                }
-            }
-        },
-        "/{version}/bookings": {
-            "post": {
-                "tags": [
-                    "bookings"
-                ],
-                "summary": "Booking confirm",
-                "description": "The booking confirmation operation confirms the rate keys selected.",
-                "operationId": "booking",
-                "consumes": [
-                    "application/json",
-                    "application/xml"
-                ],
-                "produces": [
-                    "application/json",
-                    "application/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "version",
-                        "in": "path",
-                        "description": "Default version for this operation",
-                        "required": true,
-                        "type": "string",
-                        "default": "1.2",
-                        "enum": [
-                            "1.0",
-                            "1.1",
-                            "1.2"
-                        ]
-                    },
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/bookingRQ"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation
-",
-                        "schema": {
-                            "$ref": "#/definitions/bookingRS"
-                        }
-                    },
-                    "500": {
-                        "description": "Unexpected error"
-                    }
-                }
-            }
-        },
-        "/{version}/bookings/{bookingId}": {
-            "get": {
-                "tags": [
-                    "bookings"
-                ],
-                "summary": "Booking detail",
-                "description": "The BookingDetail operation retuns all the information of the requested booking.",
-                "operationId": "bookingDetail",
-                "produces": [
-                    "application/json",
-                    "application/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "version",
-                        "in": "path",
-                        "description": "Default version for this operation",
-                        "required": true,
-                        "type": "string",
-                        "default": "1.0",
-                        "enum": [
-                            "1.0",
-                            "1.1",
-                            "1.2"
-                        ]
-                    },
-                    {
-                        "name": "bookingId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "language",
-                        "in": "query",
-                        "required": false,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation
-",
-                        "schema": {
-                            "$ref": "#/definitions/bookingDetailRS"
-                        }
-                    },
-                    "500": {
-                        "description": "Unexpected error"
-                    }
-                }
-            },
-            "put": {
-                "tags": [
-                    "bookings"
-                ],
-                "summary": "Booking change",
-                "description": "The BookingChange operation can be used to change (or simulate) different values of a booking or to partially cancel a booking (i.e: cancel a room of a two room reservation).",
-                "operationId": "bookingChange",
-                "consumes": [
-                    "application/json",
-                    "application/xml"
-                ],
-                "produces": [
-                    "application/json",
-                    "application/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "version",
-                        "in": "path",
-                        "description": "Default version for this operation",
-                        "required": true,
-                        "type": "string",
-                        "default": "1.0",
-                        "enum": [
-                            "1.0",
-                            "1.1",
-                            "1.2"
-                        ]
-                    },
-                    {
-                        "name": "bookingId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/bookingChangeRQ"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation
-",
-                        "schema": {
-                            "$ref": "#/definitions/bookingChangeRS"
-                        }
-                    },
-                    "500": {
-                        "description": "Unexpected error"
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "bookings"
-                ],
-                "summary": "Booking cancellation",
-                "description": "The BookingCancellation operation cancels a booking or simulates a booking cancellation.",
-                "operationId": "bookingCancellation",
-                "produces": [
-                    "application/json",
-                    "application/xml"
-                ],
-                "parameters": [
-                    {
-                        "name": "version",
-                        "in": "path",
-                        "description": "Default version for this operation",
-                        "required": true,
-                        "type": "string",
-                        "default": "1.0",
-                        "enum": [
-                            "1.0",
-                            "1.1",
-                            "1.2"
-                        ]
-                    },
-                    {
-                        "name": "bookingId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "cancellationFlag",
-                        "in": "query",
-                        "required": false,
-                        "type": "string",
-                        "enum": [
-                            "CANCELLATION",
-                            "SIMULATION"
-                        ]
-                    },
-                    {
-                        "name": "language",
-                        "in": "query",
-                        "required": false,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation
-",
-                        "schema": {
-                            "$ref": "#/definitions/bookingCancellationRS"
-                        }
-                    },
-                    "500": {
-                        "description": "Unexpected error"
-                    }
-                }
-            }
-        }
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "basePath": "/hotel-api",
+  "tags": [
+    {
+      "name": "status"
     },
-    "definitions": {
-        "ApiAuditData": {
-            "type": "object",
-            "properties": {
-                "processTime": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "timestamp": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "requestHost": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "serverId": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "environment": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "release": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "token": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
+    {
+      "name": "hotels"
+    },
+    {
+      "name": "checkrates"
+    },
+    {
+      "name": "bookings"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "host": "api.test.hotelbeds.com",
+  "paths": {
+    "/{version}/status": {
+      "get": {
+        "tags": [
+          "status"
+        ],
+        "summary": "Check API status",
+        "description": "Returns the status of the API",
+        "operationId": "status",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Default version for this operation",
+            "required": true,
+            "type": "string",
+            "default": "1.0",
+            "enum": [
+              "1.0",
+              "1.1",
+              "1.2"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/statusRS"
             }
-        },
-        "ApiBillingAddress": {
-            "type": "object",
-            "properties": {
-                "address1": {
-                    "type": "string"
-                },
-                "address2": {
-                    "type": "string"
-                },
-                "city": {
-                    "type": "string"
-                },
-                "state": {
-                    "type": "string"
-                },
-                "postalCode": {
-                    "type": "string"
-                },
-                "countryCode": {
-                    "type": "string"
-                }
+          },
+          "500": {
+            "description": "Unexpected error"
+          }
+        }
+      }
+    },
+    "/{version}/hotels": {
+      "post": {
+        "tags": [
+          "hotels"
+        ],
+        "summary": "Hotel availability",
+        "description": "This method is used to request room availability. Some filters and special features can be applied before sending an availability request. \n\nA flexible date search allows customers to retrieve available rates for a specified number of days prior to and post check-in.\n\nThe response generated is a list of hotels with the different room types, board types, and rates available for those hotels; but not only restricted to the dates selected.\n\nBookingAPI prices are final. Our rates include supplements and discounts and no additional price calculations are required.\n\nIt can also return cancellation fees in the availability response, providing amounts and dates at the first step of the booking.",
+        "operationId": "availability",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Default version for this operation",
+            "required": true,
+            "type": "string",
+            "default": "1.0",
+            "enum": [
+              "1.0",
+              "1.1",
+              "1.2"
+            ]
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Request body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/availabilityRQ"
             }
-        },
-        "ApiBoards": {
-            "type": "object",
-            "required": [
-                "board",
-                "included"
-            ],
-            "properties": {
-                "board": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "included": {
-                    "type": "boolean",
-                    "example": false,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "default": false
-                }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation ",
+            "schema": {
+              "$ref": "#/definitions/availabilityRS"
             }
-        },
-        "ApiBooking": {
-            "type": "object",
-            "properties": {
-                "reference": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "cancellationReference": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "clientReference": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minLength": 1,
-                    "maxLength": 20
-                },
-                "creationDate": {
-                    "type": "string",
-                    "format": "date",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "status": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "NEW",
-                        "PRECONFIRMED",
-                        "CONFIRMED",
-                        "TO_BE_UPDATED",
-                        "CANCELLED",
-                        "TO_BE_CANCELLED"
-                    ]
-                },
-                "modificationPolicies": {
-                    "$ref": "#/definitions/ApiModificationPolicies"
-                },
-                "agCommision": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "commisionVAT": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "creationUser": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "holder": {
-                    "$ref": "#/definitions/ApiHolder"
-                },
-                "remark": {
-                    "type": "string",
-                    "minLength": 0,
-                    "maxLength": 2000
-                },
-                "totalSellingRate": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "totalNet": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "pendingAmount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "currency": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "hotel": {
-                    "$ref": "#/definitions/ApiHotel"
-                }
+          }
+        }
+      }
+    },
+    "/{version}/checkrates": {
+      "post": {
+        "tags": [
+          "checkrates"
+        ],
+        "summary": "Check Availability Rates",
+        "description": "The checkrates method can complement the booking process, as it returns additional information to the availability request. However, when the rateType value is \"RECHECK\", the checkrates method is mandatory.\n\nThe rateType value \"RECHECK\" is returned for rates that do not have real-time availability. This is, that come from accommodation partners that update their products in our system periodically, with varying frequency depending on the supplier itself, the destination, hotels, etc.\n\nThe checkrates method response contains the same information provided in the availability response, but returns information only for a specific hotel and rate. The purpose of this method is double check availability and prices for any particular hotel/rate.\n\nThe prices obtained via this method are always up-to-date; along with some other information: rate breakdown, rate comments and upselling options.",
+        "operationId": "checkRate",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Default version for this operation",
+            "required": true,
+            "type": "string",
+            "default": "1.0",
+            "enum": [
+              "1.0",
+              "1.1",
+              "1.2"
+            ]
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Request body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/checkRateRQ"
             }
-        },
-        "ApiBookingDevice": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "ip": {
-                    "type": "string"
-                }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation ",
+            "schema": {
+              "$ref": "#/definitions/checkRateRS"
             }
-        },
-        "ApiBookingRoom": {
-            "type": "object",
-            "required": [
-                "rateKey"
-            ],
-            "properties": {
-                "rateKey": {
-                    "type": "string",
-                    "format": "",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "pax": {
-                    "type": "array",
-                    "xml": {
-                        "name": "paxes",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiPax",
-                        "xml": {
-                            "name": "pax"
-                        }
-                    }
-                }
+          }
+        }
+      }
+    },
+    "/{version}/bookings": {
+      "post": {
+        "tags": [
+          "bookings"
+        ],
+        "summary": "Booking confirm",
+        "description": "The booking confirmation operation confirms the rate keys selected.",
+        "operationId": "booking",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Default version for this operation",
+            "required": true,
+            "type": "string",
+            "default": "1.2",
+            "enum": [
+              "1.0",
+              "1.1",
+              "1.2"
+            ]
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/bookingRQ"
             }
-        },
-        "ApiBookings": {
-            "type": "object",
-            "properties": {
-                "from": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "to": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "total": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "booking": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/ApiBooking"
-                    }
-                }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation ",
+            "schema": {
+              "$ref": "#/definitions/bookingRS"
             }
-        },
-        "ApiCancellationPolicy": {
-            "type": "object",
-            "properties": {
-                "amount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "hotelAmount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "hotelCurrency": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "from": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
+          },
+          "500": {
+            "description": "Unexpected error"
+          }
+        }
+      }
+    },
+    "/{version}/bookings/{bookingId}": {
+      "get": {
+        "tags": [
+          "bookings"
+        ],
+        "summary": "Booking detail",
+        "description": "The BookingDetail operation retuns all the information of the requested booking.",
+        "operationId": "bookingDetail",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Default version for this operation",
+            "required": true,
+            "type": "string",
+            "default": "1.0",
+            "enum": [
+              "1.0",
+              "1.1",
+              "1.2"
+            ]
+          },
+          {
+            "name": "bookingId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation ",
+            "schema": {
+              "$ref": "#/definitions/bookingDetailRS"
             }
-        },
-        "ApiCost": {
-            "type": "object",
-            "properties": {
-                "amount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "currency": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
+          },
+          "500": {
+            "description": "Unexpected error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "bookings"
+        ],
+        "summary": "Booking change",
+        "description": "The BookingChange operation can be used to change (or simulate) different values of a booking or to partially cancel a booking (i.e: cancel a room of a two room reservation).",
+        "operationId": "bookingChange",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Default version for this operation",
+            "required": true,
+            "type": "string",
+            "default": "1.0",
+            "enum": [
+              "1.0",
+              "1.1",
+              "1.2"
+            ]
+          },
+          {
+            "name": "bookingId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/bookingChangeRQ"
             }
-        },
-        "ApiCreditCard": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "name": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "paymentType": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "AT_HOTEL",
-                        "AT_WEB"
-                    ]
-                }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation ",
+            "schema": {
+              "$ref": "#/definitions/bookingChangeRS"
             }
-        },
-        "ApiDailyRate": {
-            "type": "object",
-            "properties": {
-                "offset": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "dailyNet": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "dailySellingRate": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
+          },
+          "500": {
+            "description": "Unexpected error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "bookings"
+        ],
+        "summary": "Booking cancellation",
+        "description": "The BookingCancellation operation cancels a booking or simulates a booking cancellation.",
+        "operationId": "bookingCancellation",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Default version for this operation",
+            "required": true,
+            "type": "string",
+            "default": "1.0",
+            "enum": [
+              "1.0",
+              "1.1",
+              "1.2"
+            ]
+          },
+          {
+            "name": "bookingId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "cancellationFlag",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "CANCELLATION",
+              "SIMULATION"
+            ]
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation ",
+            "schema": {
+              "$ref": "#/definitions/bookingCancellationRS"
             }
+          },
+          "500": {
+            "description": "Unexpected error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ApiAuditData": {
+      "type": "object",
+      "properties": {
+        "processTime": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiDestination": {
-            "type": "object",
-            "required": [
-                "code"
-            ],
-            "properties": {
-                "code": {
-                    "type": "string",
-                    "example": "PMI",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minLength": 1,
-                    "maxLength": 3
-                },
-                "zone": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": 10,
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
+        "timestamp": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiFilter": {
-            "type": "object",
-            "properties": {
-                "maxHotels": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": 1000,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 1,
-                    "maximum": 2000
-                },
-                "maxRooms": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": 10,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 1,
-                    "maximum": 50
-                },
-                "minRate": {
-                    "type": "number",
-                    "example": 0,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 0
-                },
-                "maxRate": {
-                    "type": "number",
-                    "example": 1000,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 0
-                },
-                "maxRatesPerRoom": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": 1,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 1
-                },
-                "packaging": {
-                    "type": "boolean",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "default": false
-                },
-                "paymentType": {
-                    "type": "string",
-                    "example": "AT_WEB",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "AT_HOTEL",
-                        "AT_WEB",
-                        "BOTH"
-                    ]
-                },
-                "hotelPackage": {
-                    "type": "string",
-                    "example": "BOTH",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "YES",
-                        "NO",
-                        "BOTH"
-                    ]
-                },
-                "minCategory": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": 1,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 1,
-                    "maximum": 5
-                },
-                "maxCategory": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": 5,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 1,
-                    "maximum": 5
-                },
-                "contract": {
-                    "type": "string",
-                    "example": "CG-VARIOS",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
+        "requestHost": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiGeoLocation": {
-            "type": "object",
-            "required": [
-                "latitude",
-                "longitude"
-            ],
-            "properties": {
-                "longitude": {
-                    "type": "number",
-                    "example": 2.62155,
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "latitude": {
-                    "type": "number",
-                    "example": 39.5554,
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "radius": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "maximum": 200
-                },
-                "unit": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "mi",
-                        "km"
-                    ]
-                },
-                "secondaryLatitude": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "secondaryLongitude": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
+        "serverId": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiHolder": {
-            "type": "object",
-            "required": [
-                "name",
-                "surname"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minLength": 1,
-                    "maxLength": 50
-                },
-                "surname": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minLength": 1,
-                    "maxLength": 50
-                }
-            }
+        "environment": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiHotel": {
-            "type": "object",
-            "properties": {
-                "checkOut": {
-                    "type": "string",
-                    "format": "date",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "checkIn": {
-                    "type": "string",
-                    "format": "date",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "code": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "name": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "image": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "categoryCode": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "categoryName": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "destinationCode": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "destinationName": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "zoneCode": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "zoneName": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "latitude": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "longitude": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "giata": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "minRate": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "maxRate": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "totalSellingRate": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "totalNet": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "pendingAmount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "currency": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "supplier": {
-                    "$ref": "#/definitions/ApiSupplier"
-                },
-                "clientComments": {
-                    "type": "string"
-                },
-                "cancellationAmount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "upselling": {
-                    "$ref": "#/definitions/ApiUpselling"
-                },
-                "keyword": {
-                    "type": "array",
-                    "xml": {
-                        "name": "keywords",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiKeyword",
-                        "xml": {
-                            "name": "keyword"
-                        }
-                    }
-                },
-                "review": {
-                    "type": "array",
-                    "xml": {
-                        "name": "reviews",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiReview",
-                        "xml": {
-                            "name": "review"
-                        }
-                    }
-                },
-                "room": {
-                    "type": "array",
-                    "xml": {
-                        "name": "rooms",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/room",
-                        "xml": {
-                            "name": "room"
-                        }
-                    }
-                },
-                "creditCard": {
-                    "type": "array",
-                    "xml": {
-                        "name": "creditCards",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiCreditCard",
-                        "xml": {
-                            "name": "creditCard"
-                        }
-                    }
-                }
-            }
+        "release": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiHotels": {
-            "type": "object",
-            "properties": {
-                "checkIn": {
-                    "type": "string",
-                    "format": "date",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "checkOut": {
-                    "type": "string",
-                    "format": "date",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "hotel": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/ApiHotel"
-                    }
-                },
-                "total": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
+        "token": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiBillingAddress": {
+      "type": "object",
+      "properties": {
+        "address1": {
+          "type": "string"
         },
-        "ApiHotelsFilter": {
-            "type": "object",
-            "properties": {
-                "included": {
-                    "type": "boolean",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "default": false
-                },
-                "type": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "HOTELBEDS",
-                        "GIATA"
-                    ]
-                },
-                "hotel": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "maxItems": 2000,
-                    "minItems": 0
-                }
-            }
+        "address2": {
+          "type": "string"
         },
-        "ApiKeyword": {
-            "type": "object",
-            "required": [
-                "code"
-            ],
-            "properties": {
-                "code": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "rating": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
+        "city": {
+          "type": "string"
         },
-        "ApiKeywordsFilter": {
-            "type": "object",
-            "properties": {
-                "allIncluded": {
-                    "type": "boolean",
-                    "example": false,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "default": false
-                },
-                "keyword": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer",
-                        "format": "int32"
-                    }
-                }
-            }
+        "state": {
+          "type": "string"
         },
-        "ApiModificationPolicies": {
-            "type": "object",
-            "required": [
-                "cancellation",
-                "modification"
-            ],
-            "properties": {
-                "cancellation": {
-                    "type": "boolean",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "default": false
-                },
-                "modification": {
-                    "type": "boolean",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "default": false
-                }
-            }
+        "postalCode": {
+          "type": "string"
         },
-        "ApiOccupancy": {
-            "description": "In the occupancy node, the following information must be included: the number of rooms, capacity, the number of adults, the number of children and their ages, if applicable.",
-            "type": "object",
-            "required": [
-                "adults",
-                "children",
-                "rooms"
-            ],
-            "properties": {
-                "rooms": {
-                    "description": "Number of rooms",
-                    "type": "integer",
-                    "format": "int32",
-                    "example": 1,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 1
-                },
-                "adults": {
-                    "description": "Number of adults",
-                    "type": "integer",
-                    "format": "int32",
-                    "example": 2,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 1
-                },
-                "children": {
-                    "description": "Number of children",
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 0
-                },
-                "pax": {
-                    "description": "Paxes element (mandatory when children are requested)",
-                    "type": "array",
-                    "xml": {
-                        "name": "paxes",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiPax",
-                        "xml": {
-                            "name": "pax"
-                        }
-                    }
-                }
-            }
+        "countryCode": {
+          "type": "string"
+        }
+      }
+    },
+    "ApiBoards": {
+      "type": "object",
+      "required": [
+        "board",
+        "included"
+      ],
+      "properties": {
+        "board": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
-        "ApiOffer": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "name": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "amount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
+        "included": {
+          "type": "boolean",
+          "example": false,
+          "xml": {
+            "attribute": true
+          },
+          "default": false
+        }
+      }
+    },
+    "ApiBooking": {
+      "type": "object",
+      "properties": {
+        "reference": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiPax": {
-            "type": "object",
-            "required": [
-                "type"
-            ],
-            "properties": {
-                "roomId": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": 1,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 1
-                },
-                "type": {
-                    "type": "string",
-                    "example": "AD",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "AD",
-                        "CH"
-                    ]
-                },
-                "age": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": 20,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 0,
-                    "maximum": 99
-                },
-                "name": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minLength": 0,
-                    "maxLength": 50
-                },
-                "surname": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minLength": 0,
-                    "maxLength": 50
-                }
-            }
+        "cancellationReference": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiPaymentCard": {
-            "type": "object",
-            "properties": {
-                "cardType": {
-                    "type": "string"
-                },
-                "cardNumber": {
-                    "type": "string"
-                },
-                "cardHolderName": {
-                    "type": "string"
-                },
-                "expiryDate": {
-                    "type": "string"
-                },
-                "cardCVC": {
-                    "type": "string"
-                }
-            }
+        "clientReference": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "minLength": 1,
+          "maxLength": 20
         },
-        "ApiPaymentContactData": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "phoneNumber": {
-                    "type": "string"
-                }
-            }
+        "creationDate": {
+          "type": "string",
+          "format": "date",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiPaymentData": {
-            "type": "object",
-              "required": [
-              "contactData",
-                "paymentCard"
-            ],
-            "properties": {
-                "paymentCard": {
-                    "$ref": "#/definitions/ApiPaymentCard"
-                },
-                "contactData": {
-                    "$ref": "#/definitions/ApiPaymentContactData"
-                },
-                "billingAddress": {
-                    "$ref": "#/definitions/ApiBillingAddress"
-                },
-                "webPartner": {
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "device": {
-                    "$ref": "#/definitions/ApiBookingDevice"
-                }
-            }
+        "status": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "NEW",
+            "PRECONFIRMED",
+            "CONFIRMED",
+            "TO_BE_UPDATED",
+            "CANCELLED",
+            "TO_BE_CANCELLED"
+          ]
         },
-        "ApiPromotion": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "name": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "remark": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
+        "modificationPolicies": {
+          "$ref": "#/definitions/ApiModificationPolicies"
         },
-        "ApiRate": {
-            "type": "object",
-            "properties": {
-                "rateKey": {
-                    "type": "string",
-                    "format": "",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "rateClass": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "rateType": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "BOOKABLE",
-                        "RECHECK"
-                    ]
-                },
-                "net": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "discount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "discountPCT": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "sellingRate": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "hotelSellingRate": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "amount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "hotelCurrency": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "hotelMandatory": {
-                    "type": "boolean",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "default": false
-                },
-                "allotment": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "commission": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "commissionVAT": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "commissionPCT": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "cost": {
-                    "$ref": "#/definitions/ApiCost"
-                },
-                "rateCommentsId": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "rateComments": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "paymentType": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "AT_HOTEL",
-                        "AT_WEB",
-                        "BOTH"
-                    ]
-                },
-                "packaging": {
-                    "type": "boolean",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "default": false
-                },
-                "boardCode": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "boardName": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "rateBreakDown": {
-                    "$ref": "#/definitions/ApiRateBreakDown"
-                },
-                "rooms": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "adults": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "children": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "childrenAges": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "rateup": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "comment": {
-                    "type": "array",
-                    "xml": {
-                        "name": "voucherComments",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiVoucherComment",
-                        "xml": {
-                            "name": "comment"
-                        }
-                    }
-                },
-                "cancellationPolicy": {
-                    "type": "array",
-                    "xml": {
-                        "name": "cancellationPolicies",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiCancellationPolicy",
-                        "xml": {
-                            "name": "cancellationPolicy"
-                        }
-                    }
-                },
-                "taxes": {
-                    "$ref": "#/definitions/ApiTaxes"
-                },
-                "promotion": {
-                    "type": "array",
-                    "xml": {
-                        "name": "promotions",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiPromotion",
-                        "xml": {
-                            "name": "promotion"
-                        }
-                    }
-                },
-                "offer": {
-                    "type": "array",
-                    "xml": {
-                        "name": "offers",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiOffer",
-                        "xml": {
-                            "name": "offer"
-                        }
-                    }
-                },
-                "shiftRate": {
-                    "type": "array",
-                    "xml": {
-                        "name": "shifts",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiShiftRate",
-                        "xml": {
-                            "name": "shiftRate"
-                        }
-                    }
-                },
-                "dailyRate": {
-                    "type": "array",
-                    "xml": {
-                        "name": "dailyRates",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiDailyRate",
-                        "xml": {
-                            "name": "dailyRate"
-                        }
-                    }
-                }
-            }
+        "agCommision": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiRateBreakDown": {
-            "type": "object",
-            "properties": {
-                "rateDiscount": {
-                    "type": "array",
-                    "xml": {
-                        "name": "rateDiscounts",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiRateDiscount",
-                        "xml": {
-                            "name": "rateDiscount"
-                        }
-                    }
-                },
-                "rateSupplement": {
-                    "type": "array",
-                    "xml": {
-                        "name": "rateSupplements",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiRateSupplement",
-                        "xml": {
-                            "name": "rateSupplement"
-                        }
-                    }
-                }
-            }
+        "commisionVAT": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiRateDiscount": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "name": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "amount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
+        "creationUser": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiRateSupplement": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "name": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "from": {
-                    "type": "string",
-                    "format": "date",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "to": {
-                    "type": "string",
-                    "format": "date",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "amount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "nights": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "paxNumber": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
+        "holder": {
+          "$ref": "#/definitions/ApiHolder"
         },
-        "ApiReview": {
-            "type": "object",
-            "properties": {
-                "rate": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "reviewCount": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "type": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
+        "remark": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 2000
         },
-        "ApiReviewFilter": {
-            "type": "object",
-            "required": [
-                "type"
-            ],
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "TRIPADVISOR",
-                        "HOTELBEDS"
-                    ]
-                },
-                "minRate": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 0,
-                    "maximum": 5
-                },
-                "maxRate": {
-                    "type": "number",
-                    "example": 1,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 0,
-                    "maximum": 5
-                },
-                "minReviewCount": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": 1,
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
+        "totalSellingRate": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiRooms": {
-            "type": "object",
-            "required": [
-                "included",
-                "room"
-            ],
-            "properties": {
-                "room": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "included": {
-                    "type": "boolean",
-                    "example": false,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "default": false
-                }
-            }
+        "totalNet": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiShiftRate": {
-            "type": "object",
-            "properties": {
-                "rateKey": {
-                    "type": "string",
-                    "format": "",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "rateClass": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "rateType": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "BOOKABLE",
-                        "RECHECK"
-                    ]
-                },
-                "net": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "discount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "discountPCT": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "sellingRate": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "hotelSellingRate": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "amount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "hotelCurrency": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "hotelMandatory": {
-                    "type": "boolean",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "default": false
-                },
-                "allotment": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "commission": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "commissionVAT": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "commissionPCT": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "cost": {
-                    "$ref": "#/definitions/ApiCost"
-                },
-                "checkIn": {
-                    "type": "string",
-                    "format": "date",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "checkOut": {
-                    "type": "string",
-                    "format": "date",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
+        "pendingAmount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiSource": {
-            "type": "object",
-            "required": [
-                "channel",
-                "device"
-            ],
-            "properties": {
-                "channel": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "B2B",
-                        "B2C",
-                        "META",
-                        "NEWSLETTER"
-                    ]
-                },
-                "device": {
-                    "type": "string",
-                    "example": "WEB",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "MOBILE",
-                        "WEB",
-                        "TABLET"
-                    ]
-                },
-                "deviceInfo": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minLength": 0,
-                    "maxLength": 200
-                }
-            }
+        "currency": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiStay": {
-            "description": "Booking length of stay element",
-            "type": "object",
-            "required": [
-                "checkIn",
-                "checkOut"
-            ],
-            "properties": {
-                "checkIn": {
-                    "type": "string",
-                    "format": "date",
-                    "example": "2017-09-21",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "description": "Check-in date"
-                },
-                "checkOut": {
-                    "type": "string",
-                    "format": "date",
-                    "example": "2017-09-23",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "description": "Check-out date"
-                },
-                "shiftDays": {
-                    "type": "integer",
-                    "format": "int32",
-                    "example": 3,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "minimum": 1,
-                    "maximum": 5
-                },
-                "allowOnlyShift": {
-                    "type": "boolean",
-                    "example": false,
-                    "xml": {
-                        "attribute": true
-                    },
-                    "default": false
-                }
-            }
+        "hotel": {
+          "$ref": "#/definitions/ApiHotel"
+        }
+      }
+    },
+    "ApiBookingDevice": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
         },
-        "ApiSupplier": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "vatNumber": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
+        "ip": {
+          "type": "string"
+        }
+      }
+    },
+    "ApiBookingRoom": {
+      "type": "object",
+      "required": [
+        "rateKey"
+      ],
+      "properties": {
+        "rateKey": {
+          "type": "string",
+          "format": "",
+          "xml": {
+            "attribute": true
+          }
         },
-        "ApiTax": {
-            "type": "object",
-            "properties": {
-                "included": {
-                    "type": "boolean",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "default": false
-                },
-                "percent": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "amount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "currency": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "type": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "TAX",
-                        "FEE"
-                    ]
-                },
-                "clientAmount": {
-                    "type": "number",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "clientCurrency": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
-        },
-        "ApiTaxes": {
-            "type": "object",
-            "properties": {
-                "allIncluded": {
-                    "type": "boolean",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "default": false
-                },
-                "tax": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/ApiTax"
-                    }
-                }
-            }
-        },
-        "ApiUpselling": {
-            "type": "object",
-            "properties": {
-                "room": {
-                    "type": "array",
-                    "xml": {
-                        "name": "rooms",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/room",
-                        "xml": {
-                            "name": "room"
-                        }
-                    }
-                }
-            }
-        },
-        "ApiVoucher": {
-            "type": "object",
-            "properties": {
-                "language": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "email": {
-                    "$ref": "#/definitions/ApiVoucherEmail"
-                }
-            }
-        },
-        "ApiVoucherComment": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "text": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
-        },
-        "ApiVoucherEmail": {
-            "type": "object",
-            "properties": {
-                "to": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "from": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "title": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "body": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                }
-            }
-        },
-        "apiError": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "string"
-                },
-                "message": {
-                    "type": "string"
-                }
-            },
+        "pax": {
+          "type": "array",
+          "xml": {
+            "name": "paxes",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiPax",
             "xml": {
-                "name": "apiError",
-                "namespace": "http://www.hotelbeds.com/schemas/messages"
+              "name": "pax"
             }
+          }
+        }
+      }
+    },
+    "ApiBookings": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
         },
-        "availabilityRQ": {
-            "type": "object",
-            "required": [
-                "stay"
-            ],
-            "properties": {
-                "echoToken": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "stay": {
-                    "description": "Booking length of stay element",
-                    "$ref": "#/definitions/ApiStay"
-                },
-                "geolocation": {
-                    "$ref": "#/definitions/ApiGeoLocation"
-                },
-                "destination": {
-                    "$ref": "#/definitions/ApiDestination"
-                },
-                "filter": {
-                    "$ref": "#/definitions/ApiFilter"
-                },
-                "boards": {
-                    "$ref": "#/definitions/ApiBoards"
-                },
-                "rooms": {
-                    "$ref": "#/definitions/ApiRooms"
-                },
-                "dailyRate": {
-                    "type": "boolean",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "description": "Displays daily price breakdown",
-                    "default": false
-                },
-                "sourceMarket": {
-                    "type": "string",
-                    "example": "ES",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "source": {
-                    "$ref": "#/definitions/ApiSource"
-                },
-                "aifUse": {
-                    "type": "boolean",
-                    "default": false
-                },
-                "platform": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "language": {
-                    "type": "string",
-                    "example": "ENG",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "occupancy": {
-                    "type": "array",
-                    "xml": {
-                        "name": "occupancies",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiOccupancy",
-                        "xml": {
-                            "name": "occupancy"
-                        }
-                    }
-                },
-                "keywords": {
-                    "$ref": "#/definitions/ApiKeywordsFilter"
-                },
-                "hotels": {
-                    "$ref": "#/definitions/ApiHotelsFilter"
-                },
-                "review": {
-                    "type": "array",
-                    "xml": {
-                        "name": "reviews",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiReviewFilter",
-                        "xml": {
-                            "name": "review"
-                        }
-                    }
-                },
-                "accommodation": {
-                    "type": "array",
-                    "xml": {
-                        "name": "accommodations",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "type": "string",
-                        "enum": [
-                            "HOTEL",
-                            "APARTMENT",
-                            "RURAL",
-                            "HOSTEL",
-                            "APTHOTEL",
-                            "CAMPING",
-                            "HISTORIC",
-                            "PENDING",
-                            "RESORT",
-                            "HOMES"
-                        ],
-                        "xml": {
-                            "name": "accommodation"
-                        }
-                    }
-                }
-            },
-            "description": "Availability Request",
-            "xml": {
-                "name": "availabilityRQ",
-                "namespace": "http://www.hotelbeds.com/schemas/messages"
-            }
+        "to": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
         },
-        "availabilityRS": {
-            "type": "object",
-            "required": [
-                "auditData"
-            ],
-            "properties": {
-                "echoToken": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "auditData": {
-                    "$ref": "#/definitions/ApiAuditData"
-                },
-                "error": {
-                    "$ref": "#/definitions/apiError"
-                },
-                "hotels": {
-                    "$ref": "#/definitions/ApiHotels"
-                },
-                "source": {
-                    "$ref": "#/definitions/ApiSource"
-                }
-            },
-            "xml": {
-                "name": "availabilityRS",
-                "namespace": "http://www.hotelbeds.com/schemas/messages"
-            }
+        "total": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
         },
-		    "statusRS": {
-            "type": "object",
-            "required": [
-                "auditData"
-            ],
-            "properties": {
-                "echoToken": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "status": {
-                    "type": "string",
-                    "example": "OK",
-
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "auditData": {
-                    "$ref": "#/definitions/ApiAuditData"
-                },
-                "error": {
-                    "$ref": "#/definitions/apiError"
-                }
-            },
-            "xml": {
-                "name": "statusRS",
-                "namespace": "http://www.hotelbeds.com/schemas/messages"
-            }
+        "booking": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiBooking"
+          }
+        }
+      }
+    },
+    "ApiCancellationPolicy": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
         },
-        "bookingCancellationRS": {
-            "type": "object",
-            "required": [
-                "auditData"
-            ],
-            "properties": {
-                "echoToken": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "auditData": {
-                    "$ref": "#/definitions/ApiAuditData"
-                },
-                "error": {
-                    "$ref": "#/definitions/apiError"
-                },
-                "booking": {
-                    "$ref": "#/definitions/ApiBooking"
-                }
-            },
-            "xml": {
-                "name": "bookingCancellationRS",
-                "namespace": "http://www.hotelbeds.com/schemas/messages"
-            }
+        "hotelAmount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
         },
-        "bookingChangeRQ": {
-            "type": "object",
-            "required": [
-                "booking",
-                "bookingId",
-                "mode"
-            ],
-            "properties": {
-                "echoToken": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "bookingId": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "mode": {
-                    "type": "string",
-                    "enum": [
-                        "SIMULATION",
-                        "UPDATE"
-                    ]
-                },
-                "language": {
-                    "type": "string",
-                    "example": "ENG",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "booking": {
-                    "$ref": "#/definitions/ApiBooking"
-                }
-            },
-            "xml": {
-                "name": "bookingChangeRQ",
-                "namespace": "http://www.hotelbeds.com/schemas/messages"
-            }
+        "hotelCurrency": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
         },
-        "bookingChangeRS": {
-            "type": "object",
-            "required": [
-                "auditData"
-            ],
-            "properties": {
-                "echoToken": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "auditData": {
-                    "$ref": "#/definitions/ApiAuditData"
-                },
-                "error": {
-                    "$ref": "#/definitions/apiError"
-                },
-                "booking": {
-                    "$ref": "#/definitions/ApiBooking"
-                }
-            },
-            "xml": {
-                "name": "bookingChangeRS",
-                "namespace": "http://www.hotelbeds.com/schemas/messages"
-            }
+        "from": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiCost": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
         },
-        "bookingDetailRS": {
-            "type": "object",
-            "required": [
-                "auditData"
-            ],
-            "properties": {
-                "echoToken": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "auditData": {
-                    "$ref": "#/definitions/ApiAuditData"
-                },
-                "error": {
-                    "$ref": "#/definitions/apiError"
-                },
-                "booking": {
-                    "$ref": "#/definitions/ApiBooking"
-                }
-            },
-            "xml": {
-                "name": "bookingDetailRS",
-                "namespace": "http://www.hotelbeds.com/schemas/messages"
-            }
+        "currency": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiCreditCard": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
         },
-        "bookingListRS": {
-            "type": "object",
-            "required": [
-                "auditData"
-            ],
-            "properties": {
-                "echoToken": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "auditData": {
-                    "$ref": "#/definitions/ApiAuditData"
-                },
-                "error": {
-                    "$ref": "#/definitions/apiError"
-                },
-                "bookings": {
-                    "$ref": "#/definitions/ApiBookings"
-                }
-            },
-            "xml": {
-                "name": "bookingListRS",
-                "namespace": "http://www.hotelbeds.com/schemas/messages"
-            }
+        "name": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
         },
-        "bookingRQ": {
-            "type": "object",
-            "required": [
-                "clientReference",
-                "holder",
-                "room"
-            ],
-            "properties": {
-                "echoToken": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "holder": {
-                    "$ref": "#/definitions/ApiHolder"
-                },
-                "paymentData": {
-                    "$ref": "#/definitions/ApiPaymentData"
-                },
-                "clientReference": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 20
-                },
-                "remark": {
-                    "type": "string",
-                    "minLength": 0,
-                    "maxLength": 2000
-                },
-                "voucher": {
-                    "$ref": "#/definitions/ApiVoucher"
-                },
-                "language": {
-                    "type": "string",
-                    "example": "ENG",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "room": {
-                    "type": "array",
-                    "xml": {
-                        "name": "rooms",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiBookingRoom",
-                        "xml": {
-                            "name": "room"
-                        }
-                    },
-                    "maxItems": 2147483647,
-                    "minItems": 1
-                }
-            },
-            "xml": {
-                "name": "bookingRQ",
-                "namespace": "http://www.hotelbeds.com/schemas/messages"
-            }
+        "paymentType": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "AT_HOTEL",
+            "AT_WEB"
+          ]
+        }
+      }
+    },
+    "ApiDailyRate": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
         },
-        "bookingRS": {
-            "type": "object",
-            "required": [
-                "auditData"
-            ],
-            "properties": {
-                "echoToken": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "auditData": {
-                    "$ref": "#/definitions/ApiAuditData"
-                },
-                "error": {
-                    "$ref": "#/definitions/apiError"
-                },
-                "source": {
-                    "$ref": "#/definitions/ApiSource"
-                },
-                "booking": {
-                    "$ref": "#/definitions/ApiBooking"
-                }
-            },
-            "xml": {
-                "name": "bookingRS",
-                "namespace": "http://www.hotelbeds.com/schemas/messages"
-            }
+        "dailyNet": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
         },
-        "checkRateRQ": {
-            "type": "object",
-            "required": [
-                "room"
-            ],
-            "properties": {
-                "echoToken": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "upselling": {
-                    "type": "boolean",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "default": false
-                },
-                "language": {
-                    "type": "string",
-                    "example": "ENG",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "room": {
-                    "type": "array",
-                    "xml": {
-                        "name": "rooms",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiBookingRoom",
-                        "xml": {
-                            "name": "room"
-                        }
-                    },
-                    "maxItems": 2147483647,
-                    "minItems": 1
-                }
-            },
-            "xml": {
-                "name": "checkRateRQ",
-                "namespace": "http://www.hotelbeds.com/schemas/messages"
-            }
+        "dailySellingRate": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiDestination": {
+      "type": "object",
+      "required": [
+        "code"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "PMI",
+          "xml": {
+            "attribute": true
+          },
+          "minLength": 1,
+          "maxLength": 3
         },
-        "checkRateRS": {
-            "type": "object",
-            "required": [
-                "auditData"
-            ],
-            "properties": {
-                "echoToken": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "auditData": {
-                    "$ref": "#/definitions/ApiAuditData"
-                },
-                "error": {
-                    "$ref": "#/definitions/apiError"
-                },
-                "hotel": {
-                    "$ref": "#/definitions/ApiHotel"
-                },
-                "source": {
-                    "$ref": "#/definitions/ApiSource"
-                }
-            },
+        "zone": {
+          "type": "integer",
+          "format": "int32",
+          "example": 10,
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiFilter": {
+      "type": "object",
+      "properties": {
+        "maxHotels": {
+          "type": "integer",
+          "format": "int32",
+          "example": 1000,
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 1,
+          "maximum": 2000
+        },
+        "maxRooms": {
+          "type": "integer",
+          "format": "int32",
+          "example": 10,
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 1,
+          "maximum": 50
+        },
+        "minRate": {
+          "type": "number",
+          "example": 0,
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 0
+        },
+        "maxRate": {
+          "type": "number",
+          "example": 1000,
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 0
+        },
+        "maxRatesPerRoom": {
+          "type": "integer",
+          "format": "int32",
+          "example": 1,
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 1
+        },
+        "packaging": {
+          "type": "boolean",
+          "xml": {
+            "attribute": true
+          },
+          "default": false
+        },
+        "paymentType": {
+          "type": "string",
+          "example": "AT_WEB",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "AT_HOTEL",
+            "AT_WEB",
+            "BOTH"
+          ]
+        },
+        "hotelPackage": {
+          "type": "string",
+          "example": "BOTH",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "YES",
+            "NO",
+            "BOTH"
+          ]
+        },
+        "minCategory": {
+          "type": "integer",
+          "format": "int32",
+          "example": 1,
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 1,
+          "maximum": 5
+        },
+        "maxCategory": {
+          "type": "integer",
+          "format": "int32",
+          "example": 5,
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 1,
+          "maximum": 5
+        },
+        "contract": {
+          "type": "string",
+          "example": "CG-VARIOS",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiGeoLocation": {
+      "type": "object",
+      "required": [
+        "latitude",
+        "longitude"
+      ],
+      "properties": {
+        "longitude": {
+          "type": "number",
+          "example": 2.62155,
+          "xml": {
+            "attribute": true
+          }
+        },
+        "latitude": {
+          "type": "number",
+          "example": 39.5554,
+          "xml": {
+            "attribute": true
+          }
+        },
+        "radius": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          },
+          "maximum": 200
+        },
+        "unit": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "mi",
+            "km"
+          ]
+        },
+        "secondaryLatitude": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "secondaryLongitude": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiHolder": {
+      "type": "object",
+      "required": [
+        "name",
+        "surname"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "surname": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "minLength": 1,
+          "maxLength": 50
+        }
+      }
+    },
+    "ApiHotel": {
+      "type": "object",
+      "properties": {
+        "checkOut": {
+          "type": "string",
+          "format": "date",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "checkIn": {
+          "type": "string",
+          "format": "date",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "code": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "description": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "image": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "categoryCode": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "categoryName": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "destinationCode": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "destinationName": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "zoneCode": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "zoneName": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "latitude": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "longitude": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "giata": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "minRate": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "maxRate": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "totalSellingRate": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "totalNet": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "pendingAmount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "currency": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "supplier": {
+          "$ref": "#/definitions/ApiSupplier"
+        },
+        "clientComments": {
+          "type": "string"
+        },
+        "cancellationAmount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "upselling": {
+          "$ref": "#/definitions/ApiUpselling"
+        },
+        "keyword": {
+          "type": "array",
+          "xml": {
+            "name": "keywords",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiKeyword",
             "xml": {
-                "name": "checkRateRS",
-                "namespace": "http://www.hotelbeds.com/schemas/messages"
+              "name": "keyword"
             }
+          }
+        },
+        "review": {
+          "type": "array",
+          "xml": {
+            "name": "reviews",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiReview",
+            "xml": {
+              "name": "review"
+            }
+          }
         },
         "room": {
-            "type": "object",
-            "properties": {
-                "status": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    },
-                    "enum": [
-                        "NEW",
-                        "PRECONFIRMED",
-                        "CONFIRMED",
-                        "TO_BE_UPDATED",
-                        "CANCELLED",
-                        "TO_BE_CANCELLED"
-                    ]
-                },
-                "id": {
-                    "type": "integer",
-                    "format": "int32",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "code": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "name": {
-                    "type": "string",
-                    "xml": {
-                        "attribute": true
-                    }
-                },
-                "pax": {
-                    "type": "array",
-                    "xml": {
-                        "name": "paxes",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiPax",
-                        "xml": {
-                            "name": "pax"
-                        }
-                    }
-                },
-                "rate": {
-                    "type": "array",
-                    "xml": {
-                        "name": "rates",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/ApiRate",
-                        "xml": {
-                            "name": "rate"
-                        }
-                    }
-                }
-            },
+          "type": "array",
+          "xml": {
+            "name": "rooms",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/room",
             "xml": {
-                "name": "room",
-                "namespace": "http://www.hotelbeds.com/schemas/messages"
+              "name": "room"
             }
+          }
+        },
+        "creditCard": {
+          "type": "array",
+          "xml": {
+            "name": "creditCards",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiCreditCard",
+            "xml": {
+              "name": "creditCard"
+            }
+          }
         }
+      }
+    },
+    "ApiHotels": {
+      "type": "object",
+      "properties": {
+        "checkIn": {
+          "type": "string",
+          "format": "date",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "checkOut": {
+          "type": "string",
+          "format": "date",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "hotel": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiHotel"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiHotelsFilter": {
+      "type": "object",
+      "properties": {
+        "included": {
+          "type": "boolean",
+          "xml": {
+            "attribute": true
+          },
+          "default": false
+        },
+        "type": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "HOTELBEDS",
+            "GIATA"
+          ]
+        },
+        "hotel": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxItems": 2000,
+          "minItems": 0
+        }
+      }
+    },
+    "ApiKeyword": {
+      "type": "object",
+      "required": [
+        "code"
+      ],
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "rating": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiKeywordsFilter": {
+      "type": "object",
+      "properties": {
+        "allIncluded": {
+          "type": "boolean",
+          "example": false,
+          "xml": {
+            "attribute": true
+          },
+          "default": false
+        },
+        "keyword": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      }
+    },
+    "ApiModificationPolicies": {
+      "type": "object",
+      "required": [
+        "cancellation",
+        "modification"
+      ],
+      "properties": {
+        "cancellation": {
+          "type": "boolean",
+          "xml": {
+            "attribute": true
+          },
+          "default": false
+        },
+        "modification": {
+          "type": "boolean",
+          "xml": {
+            "attribute": true
+          },
+          "default": false
+        }
+      }
+    },
+    "ApiOccupancy": {
+      "description": "In the occupancy node, the following information must be included: the number of rooms, capacity, the number of adults, the number of children and their ages, if applicable.",
+      "type": "object",
+      "required": [
+        "adults",
+        "children",
+        "rooms"
+      ],
+      "properties": {
+        "rooms": {
+          "description": "Number of rooms",
+          "type": "integer",
+          "format": "int32",
+          "example": 1,
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 1
+        },
+        "adults": {
+          "description": "Number of adults",
+          "type": "integer",
+          "format": "int32",
+          "example": 2,
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 1
+        },
+        "children": {
+          "description": "Number of children",
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 0
+        },
+        "pax": {
+          "description": "Paxes element (mandatory when children are requested)",
+          "type": "array",
+          "xml": {
+            "name": "paxes",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiPax",
+            "xml": {
+              "name": "pax"
+            }
+          }
+        }
+      }
+    },
+    "ApiOffer": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "amount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiPax": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "roomId": {
+          "type": "integer",
+          "format": "int32",
+          "example": 1,
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 1
+        },
+        "type": {
+          "type": "string",
+          "example": "AD",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "AD",
+            "CH"
+          ]
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "example": 20,
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 0,
+          "maximum": 99
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "minLength": 0,
+          "maxLength": 50
+        },
+        "surname": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "minLength": 0,
+          "maxLength": 50
+        }
+      }
+    },
+    "ApiPaymentCard": {
+      "type": "object",
+      "properties": {
+        "cardType": {
+          "type": "string"
+        },
+        "cardNumber": {
+          "type": "string"
+        },
+        "cardHolderName": {
+          "type": "string"
+        },
+        "expiryDate": {
+          "type": "string"
+        },
+        "cardCVC": {
+          "type": "string"
+        }
+      }
+    },
+    "ApiPaymentContactData": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        }
+      }
+    },
+    "ApiPaymentData": {
+      "type": "object",
+      "required": [
+        "contactData",
+        "paymentCard"
+      ],
+      "properties": {
+        "paymentCard": {
+          "$ref": "#/definitions/ApiPaymentCard"
+        },
+        "contactData": {
+          "$ref": "#/definitions/ApiPaymentContactData"
+        },
+        "billingAddress": {
+          "$ref": "#/definitions/ApiBillingAddress"
+        },
+        "webPartner": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "device": {
+          "$ref": "#/definitions/ApiBookingDevice"
+        }
+      }
+    },
+    "ApiPromotion": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "remark": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiRate": {
+      "type": "object",
+      "properties": {
+        "rateKey": {
+          "type": "string",
+          "format": "",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "rateClass": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "rateType": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "BOOKABLE",
+            "RECHECK"
+          ]
+        },
+        "net": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "discount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "discountPCT": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "sellingRate": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "hotelSellingRate": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "amount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "hotelCurrency": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "hotelMandatory": {
+          "type": "boolean",
+          "xml": {
+            "attribute": true
+          },
+          "default": false
+        },
+        "allotment": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "commission": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "commissionVAT": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "commissionPCT": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "cost": {
+          "$ref": "#/definitions/ApiCost"
+        },
+        "rateCommentsId": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "rateComments": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "paymentType": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "AT_HOTEL",
+            "AT_WEB",
+            "BOTH"
+          ]
+        },
+        "packaging": {
+          "type": "boolean",
+          "xml": {
+            "attribute": true
+          },
+          "default": false
+        },
+        "boardCode": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "boardName": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "rateBreakDown": {
+          "$ref": "#/definitions/ApiRateBreakDown"
+        },
+        "rooms": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "adults": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "children": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "childrenAges": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "rateup": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "comment": {
+          "type": "array",
+          "xml": {
+            "name": "voucherComments",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiVoucherComment",
+            "xml": {
+              "name": "comment"
+            }
+          }
+        },
+        "cancellationPolicy": {
+          "type": "array",
+          "xml": {
+            "name": "cancellationPolicies",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiCancellationPolicy",
+            "xml": {
+              "name": "cancellationPolicy"
+            }
+          }
+        },
+        "taxes": {
+          "$ref": "#/definitions/ApiTaxes"
+        },
+        "promotion": {
+          "type": "array",
+          "xml": {
+            "name": "promotions",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiPromotion",
+            "xml": {
+              "name": "promotion"
+            }
+          }
+        },
+        "offer": {
+          "type": "array",
+          "xml": {
+            "name": "offers",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiOffer",
+            "xml": {
+              "name": "offer"
+            }
+          }
+        },
+        "shiftRate": {
+          "type": "array",
+          "xml": {
+            "name": "shifts",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiShiftRate",
+            "xml": {
+              "name": "shiftRate"
+            }
+          }
+        },
+        "dailyRate": {
+          "type": "array",
+          "xml": {
+            "name": "dailyRates",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiDailyRate",
+            "xml": {
+              "name": "dailyRate"
+            }
+          }
+        }
+      }
+    },
+    "ApiRateBreakDown": {
+      "type": "object",
+      "properties": {
+        "rateDiscount": {
+          "type": "array",
+          "xml": {
+            "name": "rateDiscounts",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiRateDiscount",
+            "xml": {
+              "name": "rateDiscount"
+            }
+          }
+        },
+        "rateSupplement": {
+          "type": "array",
+          "xml": {
+            "name": "rateSupplements",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiRateSupplement",
+            "xml": {
+              "name": "rateSupplement"
+            }
+          }
+        }
+      }
+    },
+    "ApiRateDiscount": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "amount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiRateSupplement": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "from": {
+          "type": "string",
+          "format": "date",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "to": {
+          "type": "string",
+          "format": "date",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "amount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "nights": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "paxNumber": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiReview": {
+      "type": "object",
+      "properties": {
+        "rate": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "reviewCount": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "type": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiReviewFilter": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "TRIPADVISOR",
+            "HOTELBEDS"
+          ]
+        },
+        "minRate": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 0,
+          "maximum": 5
+        },
+        "maxRate": {
+          "type": "number",
+          "example": 1,
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 0,
+          "maximum": 5
+        },
+        "minReviewCount": {
+          "type": "integer",
+          "format": "int32",
+          "example": 1,
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiRooms": {
+      "type": "object",
+      "required": [
+        "included",
+        "room"
+      ],
+      "properties": {
+        "room": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "included": {
+          "type": "boolean",
+          "example": false,
+          "xml": {
+            "attribute": true
+          },
+          "default": false
+        }
+      }
+    },
+    "ApiShiftRate": {
+      "type": "object",
+      "properties": {
+        "rateKey": {
+          "type": "string",
+          "format": "",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "rateClass": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "rateType": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "BOOKABLE",
+            "RECHECK"
+          ]
+        },
+        "net": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "discount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "discountPCT": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "sellingRate": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "hotelSellingRate": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "amount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "hotelCurrency": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "hotelMandatory": {
+          "type": "boolean",
+          "xml": {
+            "attribute": true
+          },
+          "default": false
+        },
+        "allotment": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "commission": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "commissionVAT": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "commissionPCT": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "cost": {
+          "$ref": "#/definitions/ApiCost"
+        },
+        "checkIn": {
+          "type": "string",
+          "format": "date",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "checkOut": {
+          "type": "string",
+          "format": "date",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiSource": {
+      "type": "object",
+      "required": [
+        "channel",
+        "device"
+      ],
+      "properties": {
+        "channel": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "B2B",
+            "B2C",
+            "META",
+            "NEWSLETTER"
+          ]
+        },
+        "device": {
+          "type": "string",
+          "example": "WEB",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "MOBILE",
+            "WEB",
+            "TABLET"
+          ]
+        },
+        "deviceInfo": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "minLength": 0,
+          "maxLength": 200
+        }
+      }
+    },
+    "ApiStay": {
+      "description": "Booking length of stay element",
+      "type": "object",
+      "required": [
+        "checkIn",
+        "checkOut"
+      ],
+      "properties": {
+        "checkIn": {
+          "type": "string",
+          "format": "date",
+          "example": "2017-09-21",
+          "xml": {
+            "attribute": true
+          },
+          "description": "Check-in date"
+        },
+        "checkOut": {
+          "type": "string",
+          "format": "date",
+          "example": "2017-09-23",
+          "xml": {
+            "attribute": true
+          },
+          "description": "Check-out date"
+        },
+        "shiftDays": {
+          "type": "integer",
+          "format": "int32",
+          "example": 3,
+          "xml": {
+            "attribute": true
+          },
+          "minimum": 1,
+          "maximum": 5
+        },
+        "allowOnlyShift": {
+          "type": "boolean",
+          "example": false,
+          "xml": {
+            "attribute": true
+          },
+          "default": false
+        }
+      }
+    },
+    "ApiSupplier": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "vatNumber": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiTax": {
+      "type": "object",
+      "properties": {
+        "included": {
+          "type": "boolean",
+          "xml": {
+            "attribute": true
+          },
+          "default": false
+        },
+        "percent": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "amount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "currency": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "type": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "TAX",
+            "FEE"
+          ]
+        },
+        "clientAmount": {
+          "type": "number",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "clientCurrency": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiTaxes": {
+      "type": "object",
+      "properties": {
+        "allIncluded": {
+          "type": "boolean",
+          "xml": {
+            "attribute": true
+          },
+          "default": false
+        },
+        "tax": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiTax"
+          }
+        }
+      }
+    },
+    "ApiUpselling": {
+      "type": "object",
+      "properties": {
+        "room": {
+          "type": "array",
+          "xml": {
+            "name": "rooms",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/room",
+            "xml": {
+              "name": "room"
+            }
+          }
+        }
+      }
+    },
+    "ApiVoucher": {
+      "type": "object",
+      "properties": {
+        "language": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "email": {
+          "$ref": "#/definitions/ApiVoucherEmail"
+        }
+      }
+    },
+    "ApiVoucherComment": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "text": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "ApiVoucherEmail": {
+      "type": "object",
+      "properties": {
+        "to": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "from": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "title": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "body": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        }
+      }
+    },
+    "apiError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "apiError",
+        "namespace": "http://www.hotelbeds.com/schemas/messages"
+      }
+    },
+    "availabilityRQ": {
+      "type": "object",
+      "required": [
+        "stay"
+      ],
+      "properties": {
+        "echoToken": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "stay": {
+          "description": "Booking length of stay element",
+          "$ref": "#/definitions/ApiStay"
+        },
+        "geolocation": {
+          "$ref": "#/definitions/ApiGeoLocation"
+        },
+        "destination": {
+          "$ref": "#/definitions/ApiDestination"
+        },
+        "filter": {
+          "$ref": "#/definitions/ApiFilter"
+        },
+        "boards": {
+          "$ref": "#/definitions/ApiBoards"
+        },
+        "rooms": {
+          "$ref": "#/definitions/ApiRooms"
+        },
+        "dailyRate": {
+          "type": "boolean",
+          "xml": {
+            "attribute": true
+          },
+          "description": "Displays daily price breakdown",
+          "default": false
+        },
+        "sourceMarket": {
+          "type": "string",
+          "example": "ES",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "source": {
+          "$ref": "#/definitions/ApiSource"
+        },
+        "aifUse": {
+          "type": "boolean",
+          "default": false
+        },
+        "platform": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "language": {
+          "type": "string",
+          "example": "ENG",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "occupancy": {
+          "type": "array",
+          "xml": {
+            "name": "occupancies",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiOccupancy",
+            "xml": {
+              "name": "occupancy"
+            }
+          }
+        },
+        "keywords": {
+          "$ref": "#/definitions/ApiKeywordsFilter"
+        },
+        "hotels": {
+          "$ref": "#/definitions/ApiHotelsFilter"
+        },
+        "review": {
+          "type": "array",
+          "xml": {
+            "name": "reviews",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiReviewFilter",
+            "xml": {
+              "name": "review"
+            }
+          }
+        },
+        "accommodation": {
+          "type": "array",
+          "xml": {
+            "name": "accommodations",
+            "wrapped": true
+          },
+          "items": {
+            "type": "string",
+            "enum": [
+              "HOTEL",
+              "APARTMENT",
+              "RURAL",
+              "HOSTEL",
+              "APTHOTEL",
+              "CAMPING",
+              "HISTORIC",
+              "PENDING",
+              "RESORT",
+              "HOMES"
+            ],
+            "xml": {
+              "name": "accommodation"
+            }
+          }
+        }
+      },
+      "description": "Availability Request",
+      "xml": {
+        "name": "availabilityRQ",
+        "namespace": "http://www.hotelbeds.com/schemas/messages"
+      }
+    },
+    "availabilityRS": {
+      "type": "object",
+      "required": [
+        "auditData"
+      ],
+      "properties": {
+        "echoToken": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "auditData": {
+          "$ref": "#/definitions/ApiAuditData"
+        },
+        "error": {
+          "$ref": "#/definitions/apiError"
+        },
+        "hotels": {
+          "$ref": "#/definitions/ApiHotels"
+        },
+        "source": {
+          "$ref": "#/definitions/ApiSource"
+        }
+      },
+      "xml": {
+        "name": "availabilityRS",
+        "namespace": "http://www.hotelbeds.com/schemas/messages"
+      }
+    },
+    "statusRS": {
+      "type": "object",
+      "required": [
+        "auditData"
+      ],
+      "properties": {
+        "echoToken": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "status": {
+          "type": "string",
+          "example": "OK",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "auditData": {
+          "$ref": "#/definitions/ApiAuditData"
+        },
+        "error": {
+          "$ref": "#/definitions/apiError"
+        }
+      },
+      "xml": {
+        "name": "statusRS",
+        "namespace": "http://www.hotelbeds.com/schemas/messages"
+      }
+    },
+    "bookingCancellationRS": {
+      "type": "object",
+      "required": [
+        "auditData"
+      ],
+      "properties": {
+        "echoToken": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "auditData": {
+          "$ref": "#/definitions/ApiAuditData"
+        },
+        "error": {
+          "$ref": "#/definitions/apiError"
+        },
+        "booking": {
+          "$ref": "#/definitions/ApiBooking"
+        }
+      },
+      "xml": {
+        "name": "bookingCancellationRS",
+        "namespace": "http://www.hotelbeds.com/schemas/messages"
+      }
+    },
+    "bookingChangeRQ": {
+      "type": "object",
+      "required": [
+        "booking",
+        "bookingId",
+        "mode"
+      ],
+      "properties": {
+        "echoToken": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "bookingId": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "SIMULATION",
+            "UPDATE"
+          ]
+        },
+        "language": {
+          "type": "string",
+          "example": "ENG",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "booking": {
+          "$ref": "#/definitions/ApiBooking"
+        }
+      },
+      "xml": {
+        "name": "bookingChangeRQ",
+        "namespace": "http://www.hotelbeds.com/schemas/messages"
+      }
+    },
+    "bookingChangeRS": {
+      "type": "object",
+      "required": [
+        "auditData"
+      ],
+      "properties": {
+        "echoToken": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "auditData": {
+          "$ref": "#/definitions/ApiAuditData"
+        },
+        "error": {
+          "$ref": "#/definitions/apiError"
+        },
+        "booking": {
+          "$ref": "#/definitions/ApiBooking"
+        }
+      },
+      "xml": {
+        "name": "bookingChangeRS",
+        "namespace": "http://www.hotelbeds.com/schemas/messages"
+      }
+    },
+    "bookingDetailRS": {
+      "type": "object",
+      "required": [
+        "auditData"
+      ],
+      "properties": {
+        "echoToken": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "auditData": {
+          "$ref": "#/definitions/ApiAuditData"
+        },
+        "error": {
+          "$ref": "#/definitions/apiError"
+        },
+        "booking": {
+          "$ref": "#/definitions/ApiBooking"
+        }
+      },
+      "xml": {
+        "name": "bookingDetailRS",
+        "namespace": "http://www.hotelbeds.com/schemas/messages"
+      }
+    },
+    "bookingListRS": {
+      "type": "object",
+      "required": [
+        "auditData"
+      ],
+      "properties": {
+        "echoToken": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "auditData": {
+          "$ref": "#/definitions/ApiAuditData"
+        },
+        "error": {
+          "$ref": "#/definitions/apiError"
+        },
+        "bookings": {
+          "$ref": "#/definitions/ApiBookings"
+        }
+      },
+      "xml": {
+        "name": "bookingListRS",
+        "namespace": "http://www.hotelbeds.com/schemas/messages"
+      }
+    },
+    "bookingRQ": {
+      "type": "object",
+      "required": [
+        "clientReference",
+        "holder",
+        "room"
+      ],
+      "properties": {
+        "echoToken": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "holder": {
+          "$ref": "#/definitions/ApiHolder"
+        },
+        "paymentData": {
+          "$ref": "#/definitions/ApiPaymentData"
+        },
+        "clientReference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20
+        },
+        "remark": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 2000
+        },
+        "voucher": {
+          "$ref": "#/definitions/ApiVoucher"
+        },
+        "language": {
+          "type": "string",
+          "example": "ENG",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "room": {
+          "type": "array",
+          "xml": {
+            "name": "rooms",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiBookingRoom",
+            "xml": {
+              "name": "room"
+            }
+          },
+          "maxItems": 2147483647,
+          "minItems": 1
+        }
+      },
+      "xml": {
+        "name": "bookingRQ",
+        "namespace": "http://www.hotelbeds.com/schemas/messages"
+      }
+    },
+    "bookingRS": {
+      "type": "object",
+      "required": [
+        "auditData"
+      ],
+      "properties": {
+        "echoToken": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "auditData": {
+          "$ref": "#/definitions/ApiAuditData"
+        },
+        "error": {
+          "$ref": "#/definitions/apiError"
+        },
+        "source": {
+          "$ref": "#/definitions/ApiSource"
+        },
+        "booking": {
+          "$ref": "#/definitions/ApiBooking"
+        }
+      },
+      "xml": {
+        "name": "bookingRS",
+        "namespace": "http://www.hotelbeds.com/schemas/messages"
+      }
+    },
+    "checkRateRQ": {
+      "type": "object",
+      "required": [
+        "room"
+      ],
+      "properties": {
+        "echoToken": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "upselling": {
+          "type": "boolean",
+          "xml": {
+            "attribute": true
+          },
+          "default": false
+        },
+        "language": {
+          "type": "string",
+          "example": "ENG",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "room": {
+          "type": "array",
+          "xml": {
+            "name": "rooms",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiBookingRoom",
+            "xml": {
+              "name": "room"
+            }
+          },
+          "maxItems": 2147483647,
+          "minItems": 1
+        }
+      },
+      "xml": {
+        "name": "checkRateRQ",
+        "namespace": "http://www.hotelbeds.com/schemas/messages"
+      }
+    },
+    "checkRateRS": {
+      "type": "object",
+      "required": [
+        "auditData"
+      ],
+      "properties": {
+        "echoToken": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "auditData": {
+          "$ref": "#/definitions/ApiAuditData"
+        },
+        "error": {
+          "$ref": "#/definitions/apiError"
+        },
+        "hotel": {
+          "$ref": "#/definitions/ApiHotel"
+        },
+        "source": {
+          "$ref": "#/definitions/ApiSource"
+        }
+      },
+      "xml": {
+        "name": "checkRateRS",
+        "namespace": "http://www.hotelbeds.com/schemas/messages"
+      }
+    },
+    "room": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          },
+          "enum": [
+            "NEW",
+            "PRECONFIRMED",
+            "CONFIRMED",
+            "TO_BE_UPDATED",
+            "CANCELLED",
+            "TO_BE_CANCELLED"
+          ]
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "code": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "attribute": true
+          }
+        },
+        "pax": {
+          "type": "array",
+          "xml": {
+            "name": "paxes",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiPax",
+            "xml": {
+              "name": "pax"
+            }
+          }
+        },
+        "rate": {
+          "type": "array",
+          "xml": {
+            "name": "rates",
+            "wrapped": true
+          },
+          "items": {
+            "$ref": "#/definitions/ApiRate",
+            "xml": {
+              "name": "rate"
+            }
+          }
+        }
+      },
+      "xml": {
+        "name": "room",
+        "namespace": "http://www.hotelbeds.com/schemas/messages"
+      }
     }
+  }
 }
