@@ -2838,7 +2838,7 @@
             }
           }
         },
-        "rate": {
+        "rates": {
           "type": "array",
           "xml": {
             "name": "rates",
