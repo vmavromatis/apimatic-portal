@@ -1143,7 +1143,7 @@
             }
           }
         },
-        "room": {
+        "rooms": {
           "type": "array",
           "xml": {
             "name": "rooms",
