@@ -1,12 +1,12 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "BookingAPI covers the complete booking process; it\n\t\t\t\t\t\t\t\t\tallows generating lists of hotels, confirming bookings, getting\n\t\t\t\t\t\t\t\t\tlists of bookings, making cancellations and obtaining booking\n\t\t\t\t\t\t\t\t\tinformation.",
+        "description": "BOOKINGAPI is designed to book hotels in real time as fast as in two steps. It covers the complete booking process; it allows generating lists of hotels, confirming bookings, getting lists of bookings, obtaining booking information, making cancellations and modify existing bookings.\n\r BOOKINGAPI works in combination with CONTENTAPI to obtain content information from the hotels, such as pictures, description, facilities, services, etc. Please refer to the ContentAPI documentation and IO/DOCS for related information.\n\r  BOOKINGAPI has been designed for a two steps confirmation, but due the the complexity of client and providers systems a third method has been designed.",
         "version": "1.0",
-        "title": "APItude BookingAPI",
+        "title": "APITUDE BOOKINGAPI",
         "termsOfService": "https://developer.hotelbeds.com/getting_started",
         "contact": {
-            "name": "Hotelbeds APItude team",
+            "name": "APITUDE, Hotelbeds Group",
             "url": "https://developer.hotelbeds.com",
             "email": "apitude@hotelbeds.com"
         },
@@ -51,7 +51,7 @@
                     {
                         "name": "version",
                         "in": "path",
-                        "description": "Specification version",
+                        "description": "Default version for this operation",
                         "required": true,
                         "type": "string",
                         "default": "1.0",
@@ -64,7 +64,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
+                        "description": "Successful operation",
+						"schema": {
+                            "$ref": "#/definitions/statusRS"
+                         }
                     },
                     "500": {
                         "description": "Unexpected error"
@@ -81,18 +84,18 @@
                 "description": "This method is used to request room availability. Some filters and special features can be applied before sending an availability request. \n\nA flexible date search allows customers to retrieve available rates for a specified number of days prior to and post check-in.\n\nThe response generated is a list of hotels with the different room types, board types, and rates available for those hotels; but not only restricted to the dates selected.\n\nBookingAPI prices are final. Our rates include supplements and discounts and no additional price calculations are required.\n\nIt can also return cancellation fees in the availability response, providing amounts and dates at the first step of the booking.",
                 "operationId": "availability",
                 "consumes": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
                         "name": "version",
                         "in": "path",
-                        "description": "Specification version",
+                        "description": "Default version for this operation",
                         "required": true,
                         "type": "string",
                         "default": "1.0",
@@ -106,7 +109,7 @@
                         "in": "body",
                         "name": "body",
                         "description": "Request body",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/availabilityRQ"
                         }
@@ -114,7 +117,8 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "successful operation",
+                        "description": "Successful operation
+",
                         "schema": {
                             "$ref": "#/definitions/availabilityRS"
                         }
@@ -129,20 +133,20 @@
                 ],
                 "summary": "Check Availability Rates",
                 "description": "The checkrates method can complement the booking process, as it returns additional information to the availability request. However, when the rateType value is \"RECHECK\", the checkrates method is mandatory.\n\nThe rateType value \"RECHECK\" is returned for rates that do not have real-time availability. This is, that come from accommodation partners that update their products in our system periodically, with varying frequency depending on the supplier itself, the destination, hotels, etc.\n\nThe checkrates method response contains the same information provided in the availability response, but returns information only for a specific hotel and rate. The purpose of this method is double check availability and prices for any particular hotel/rate.\n\nThe prices obtained via this method are always up-to-date; along with some other information: rate breakdown, rate comments and upselling options.",
-                "operationId": "checkRate2",
+                "operationId": "checkRate",
                 "consumes": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
                         "name": "version",
                         "in": "path",
-                        "description": "Specification version",
+                        "description": "Default version for this operation",
                         "required": true,
                         "type": "string",
                         "default": "1.0",
@@ -156,7 +160,7 @@
                         "in": "body",
                         "name": "body",
                         "description": "Request body",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/checkRateRQ"
                         }
@@ -164,7 +168,8 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "successful operation",
+                        "description": "Successful operation
+",
                         "schema": {
                             "$ref": "#/definitions/checkRateRS"
                         }
@@ -178,21 +183,21 @@
                     "bookings"
                 ],
                 "summary": "Booking confirm",
-                "description": "Description.....",
+                "description": "The booking confirmation operation confirms the rate keys selected.",
                 "operationId": "booking",
                 "consumes": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
                         "name": "version",
                         "in": "path",
-                        "description": "Specification version",
+                        "description": "Default version for this operation",
                         "required": true,
                         "type": "string",
                         "default": "1.2",
@@ -205,7 +210,7 @@
                     {
                         "in": "body",
                         "name": "body",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/bookingRQ"
                         }
@@ -213,7 +218,8 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Sample",
+                        "description": "Successful operation
+",
                         "schema": {
                             "$ref": "#/definitions/bookingRS"
                         }
@@ -230,17 +236,17 @@
                     "bookings"
                 ],
                 "summary": "Booking detail",
-                "description": "Description.....",
+                "description": "The BookingDetail operation retuns all the information of the requested booking.",
                 "operationId": "bookingDetail",
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
                         "name": "version",
                         "in": "path",
-                        "description": "Specification version",
+                        "description": "Default version for this operation",
                         "required": true,
                         "type": "string",
                         "default": "1.0",
@@ -265,7 +271,8 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Sample",
+                        "description": "Successful operation
+",
                         "schema": {
                             "$ref": "#/definitions/bookingDetailRS"
                         }
@@ -280,21 +287,21 @@
                     "bookings"
                 ],
                 "summary": "Booking change",
-                "description": "Description.....",
+                "description": "The BookingChange operation can be used to change (or simulate) different values of a booking or to partially cancel a booking (i.e: cancel a room of a two room reservation).",
                 "operationId": "bookingChange",
                 "consumes": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
                         "name": "version",
                         "in": "path",
-                        "description": "Specification version",
+                        "description": "Default version for this operation",
                         "required": true,
                         "type": "string",
                         "default": "1.0",
@@ -313,7 +320,7 @@
                     {
                         "in": "body",
                         "name": "body",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/bookingChangeRQ"
                         }
@@ -321,7 +328,8 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Sample",
+                        "description": "Successful operation
+",
                         "schema": {
                             "$ref": "#/definitions/bookingChangeRS"
                         }
@@ -336,17 +344,17 @@
                     "bookings"
                 ],
                 "summary": "Booking cancellation",
-                "description": "Description.....",
+                "description": "The BookingCancellation operation cancels a booking or simulates a booking cancellation.",
                 "operationId": "bookingCancellation",
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
                         "name": "version",
                         "in": "path",
-                        "description": "Specification version",
+                        "description": "Default version for this operation",
                         "required": true,
                         "type": "string",
                         "default": "1.0",
@@ -381,7 +389,8 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Sample",
+                        "description": "Successful operation
+",
                         "schema": {
                             "$ref": "#/definitions/bookingCancellationRS"
                         }
@@ -1297,6 +1306,7 @@
             }
         },
         "ApiOccupancy": {
+            "description": "In the occupancy node, the following information must be included: the number of rooms, capacity, the number of adults, the number of children and their ages, if applicable.",
             "type": "object",
             "required": [
                 "adults",
@@ -1305,6 +1315,7 @@
             ],
             "properties": {
                 "rooms": {
+                    "description": "Number of rooms",
                     "type": "integer",
                     "format": "int32",
                     "example": 1,
@@ -1314,6 +1325,7 @@
                     "minimum": 1
                 },
                 "adults": {
+                    "description": "Number of adults",
                     "type": "integer",
                     "format": "int32",
                     "example": 2,
@@ -1323,6 +1335,7 @@
                     "minimum": 1
                 },
                 "children": {
+                    "description": "Number of children",
                     "type": "integer",
                     "format": "int32",
                     "xml": {
@@ -1331,6 +1344,7 @@
                     "minimum": 0
                 },
                 "pax": {
+                    "description": "Paxes element (mandatory when children are requested)",
                     "type": "array",
                     "xml": {
                         "name": "paxes",
@@ -1385,6 +1399,7 @@
                 },
                 "type": {
                     "type": "string",
+                    "example": "AD",
                     "xml": {
                         "attribute": true
                     },
@@ -1622,7 +1637,8 @@
                     },
                     "enum": [
                         "AT_HOTEL",
-                        "AT_WEB"
+                        "AT_WEB",
+                        "BOTH"
                     ]
                 },
                 "packaging": {
@@ -2119,6 +2135,7 @@
             }
         },
         "ApiStay": {
+            "description": "Booking length of stay element",
             "type": "object",
             "required": [
                 "checkIn",
@@ -2379,7 +2396,7 @@
                     "xml": {
                         "attribute": true
                     },
-                    "description": "Display the rate day-by-day",
+                    "description": "Displays daily price breakdown",
                     "default": false
                 },
                 "sourceMarket": {
@@ -2501,6 +2518,38 @@
             },
             "xml": {
                 "name": "availabilityRS",
+                "namespace": "http://www.hotelbeds.com/schemas/messages"
+            }
+        },
+		    "statusRS": {
+            "type": "object",
+            "required": [
+                "auditData"
+            ],
+            "properties": {
+                "echoToken": {
+                    "type": "string",
+                    "xml": {
+                        "attribute": true
+                    }
+                },
+                "status": {
+                    "type": "string",
+                    "example": "OK",
+
+                    "xml": {
+                        "attribute": true
+                    }
+                },
+                "auditData": {
+                    "$ref": "#/definitions/ApiAuditData"
+                },
+                "error": {
+                    "$ref": "#/definitions/apiError"
+                }
+            },
+            "xml": {
+                "name": "statusRS",
                 "namespace": "http://www.hotelbeds.com/schemas/messages"
             }
         },
