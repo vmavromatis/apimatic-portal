@@ -1188,7 +1188,7 @@
             "attribute": true
           }
         },
-        "hotel": {
+        "hotels": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/ApiHotel"
@@ -1211,7 +1211,7 @@
           "xml": {
             "attribute": true
           },
-          "default": false
+          "default": true
         },
         "type": {
           "type": "string",
@@ -2421,7 +2421,7 @@
             "attribute": true
           }
         },
-        "occupancy": {
+        "occupancies": {
           "type": "array",
           "xml": {
             "name": "occupancies",
